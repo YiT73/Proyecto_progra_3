@@ -106,7 +106,8 @@ public:
             std::unordered_set<string> tags = dividirConComillas(tagsStr);
 
             // Crear la película y añadirla al mapa
-            peliculas[imdb_id] = Pelicula(title, plot_synopsis, tags);
+            Pelicula pelicula(imdb_id, title, plot_synopsis, tags);
+            peliculas[imdb_id] = std::move(pelicula);
         }
 
         archivo.close();

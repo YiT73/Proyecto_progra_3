@@ -10,5 +10,7 @@ add_executable(projecto_progra_3 main.cpp
         Repertorio.cpp
         Repertorio.h
         PeliculaBuilder.h
+        Nodo.h
+        GrafoPeliculas.h
 
 )

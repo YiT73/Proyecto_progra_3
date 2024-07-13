@@ -9,12 +9,13 @@
 #include <algorithm>
 #include <stdexcept>
 #include "Pelicula.h"
-
+using std::string;
 class PeliculaBuilder {
 private:
-    std::string titulo;
-    std::string sinopsis;
-    std::unordered_set<std::string> tags;
+    string id;
+    string titulo;
+    string sinopsis;
+    unordered_set<std::string> tags;
 
     void limpiarTexto(std::string& texto) {
         texto.erase(std::remove_if(texto.begin(), texto.end(),
@@ -22,6 +23,10 @@ private:
     }
 
 public:
+    PeliculaBuilder& conId(string i) {
+        this->id = std::move(i);
+        return *this;
+    }
     PeliculaBuilder& conTitulo(std::string t) {
         limpiarTexto(t);
         if (t.empty()) {
@@ -56,10 +61,13 @@ public:
     }
 
     Pelicula construir() {
+        if (id.empty()) {
+            throw std::runtime_error("No se puede construir una película sin ID");
+        }
         if (titulo.empty()) {
             throw std::runtime_error("No se puede construir una película sin título");
         }
-        return Pelicula(std::move(titulo), std::move(sinopsis), std::move(tags));
+        return Pelicula(std::move(id), std::move(titulo), std::move(sinopsis), std::move(tags));
     }
 };
 #endif //PROJECTO_PROGRA_3_PELICULABUILDER_H
