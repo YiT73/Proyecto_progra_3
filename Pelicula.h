@@ -15,6 +15,7 @@ private:
     string simopsis;
     unordered_set<string> tags;
 public:
+    Pelicula()=default;
     Pelicula(string t,string s, unordered_set<string> ta):titulo(std::move(t)),simopsis(std::move(s)),tags(std::move(ta)){};
 };
 

@@ -10,13 +10,48 @@
 #include "Pelicula.h"
 #include <fstream>
 #include <sstream>
-using std::unordered_map,std::unordered_set,std::ifstream,std::getline;
+#include <vector>
+using std::unordered_map,std::unordered_set,std::ifstream,std::getline,std::vector,std::istringstream;
 class Repertorio {
 private:
-    unordered_map<string,Pelicula> peliculas;
-    Repertorio()=default;
+    unordered_map<string, Pelicula> peliculas;
+
+    Repertorio() = default;
+
 public:
-    unordered_map<string, Pelicula> leerCSV(const std::string& nombreArchivo) {
+    unordered_set<string> dividirConComillas(const string& str) {
+        unordered_set<string> tokens;
+        istringstream tokenStream(str);
+        string token;
+        bool enComillas = false;
+        string tagCompleto;
+        char c;
+
+        while (tokenStream.get(c)) {
+            if (c == '"') {
+                enComillas = !enComillas;
+                if (!enComillas && !tagCompleto.empty()) {
+                    tokens.insert(tagCompleto);
+                    tagCompleto.clear();
+                }
+            } else if (c == ',' && !enComillas) {
+                if (!tagCompleto.empty()) {
+                    tokens.insert(tagCompleto);
+                    tagCompleto.clear();
+                }
+            } else {
+                tagCompleto += c;
+            }
+        }
+
+        if (!tagCompleto.empty()) {
+            tokens.insert(tagCompleto);
+        }
+
+        return tokens;
+    }
+
+    unordered_map<string, Pelicula> leerCSV(const string& nombreArchivo) {
         unordered_map<string, Pelicula> peliculas;
         ifstream archivo(nombreArchivo);
         string linea;
@@ -30,29 +65,53 @@ public:
         getline(archivo, linea);
 
         while (getline(archivo, linea)) {
-            std::istringstream stream(linea);
-            string id, titulo, sinopsis,tag,split,recurso;
-            unordered_set<string> tags;
+            istringstream stream(linea);
+            string imdb_id, title, plot_synopsis, tagsStr, split, synopsis_source;
 
-            // Leer los valores de cada columna. Supongamos que las columnas están en el orden:
-            // columna1, columna2, columna3, columna4, columna5, columna6
-            getline(stream, id, ',');  // columna1
-            getline(stream, titulo, ','); // columna2
-            getline(stream, sinopsis, ',');// columna3
-            while (getline(stream, tag, ',')){
-                tags.insert(tag);
+            // Leer imdb_id
+            getline(stream, imdb_id, ',');
+
+            // Leer title
+            if (stream.peek() == '"') {
+                stream.get(); // Consumir la comilla inicial
+                getline(stream, title, '"');
+                stream.get(); // Consumir la coma después de las comillas
+            } else {
+                getline(stream, title, ',');
             }
-              // columna4
-            getline(stream, split, ',');  // columna5
-            getline(stream, recurso, ','); // columna6
 
-            peliculas[titulo] = Pelicula(titulo,sinopsis, tags);
+            // Leer plot_synopsis
+            if (stream.peek() == '"') {
+                stream.get(); // Consumir la comilla inicial
+                getline(stream, plot_synopsis, '"');
+                stream.get(); // Consumir la coma después de las comillas
+            } else {
+                getline(stream, plot_synopsis, ',');
+            }
+
+            // Leer tags
+            if (stream.peek() == '"') {
+                stream.get(); // Consumir la comilla inicial
+                getline(stream, tagsStr, '"');
+                stream.get(); // Consumir la coma después de las comillas
+            } else {
+                getline(stream, tagsStr, ',');
+            }
+
+            // Leer split y synopsis_source
+            getline(stream, split, ',');
+            getline(stream, synopsis_source);
+
+            // Procesar los tags
+            std::unordered_set<string> tags = dividirConComillas(tagsStr);
+
+            // Crear la película y añadirla al mapa
+            peliculas[imdb_id] = Pelicula(title, plot_synopsis, tags);
         }
 
         archivo.close();
         return peliculas;
     }
 };
-
 
 #endif //PROJECTO_PROGRA_3_REPERTORIO_H
