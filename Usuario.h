@@ -20,15 +20,15 @@ private:
         cin>>nombre;
         cout<<"Cual es su edad:";
         cin>>edad;
-        cout<<"Ingrese su contraseña:";
+        cout<<"Ingrese su contrasena:";
         cin>>pwd;
-        cout<<"Rectifique su contraseña:";
+        cout<<"Rectifique su contrasena:";
         cin>>pwd_tem;
         while (pwd_tem!=pwd){
             cout<<"Ingrese correctamente la contraseña!:";
             cin>>pwd_tem;
         }
-        cout<<"Se verifico correctamente la contraseña :D";
+        cout<<"Se verifico correctamente la contrasena :D"<<endl;
 
     }
 
@@ -43,11 +43,12 @@ public:
     // Constructor privado para evitar la creación de instancias
     void iniciar_sesion(){
         string nombre_b;
+        cout<<"Inicie sesion"<<endl;
         cout<<"Ingresa tu usuario:";
-        cin>>nombre;
+        cin>>nombre_b;
         int pwd_b=0;
         cout<<"Password:";
-        cin>>pwd;
+        cin>>pwd_b;
         if(pwd_b==pwd&&nombre_b==nombre){
             acceso= true;
         }
@@ -59,5 +60,6 @@ public:
         return tem;
     }
 };
+Usuario*Usuario::tem= nullptr;
 
 #endif //PROJECTO_PROGRA_3_USUARIO_H
