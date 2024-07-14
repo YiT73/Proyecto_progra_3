@@ -16,7 +16,6 @@ class Repertorio {
 private:
     unordered_map<string, Pelicula> peliculas;
 
-    Repertorio() = default;
 
 public:
     unordered_set<string> dividirConComillas(const string& str) {

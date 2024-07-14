@@ -59,6 +59,9 @@ public:
         }
         return tem;
     }
+    int get_edad(){
+        return edad;
+    }
 };
 Usuario*Usuario::tem= nullptr;
 

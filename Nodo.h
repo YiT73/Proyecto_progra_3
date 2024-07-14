@@ -19,5 +19,6 @@ public:
     void agregarConexion(Nodo* otroNodo) {
         conexiones.insert(otroNodo);
     }
+
 };
 #endif //PROJECTO_PROGRA_3_NODO_H
