@@ -8,6 +8,7 @@
 #include <unordered_map>
 #include <vector>
 #include <sstream>
+#include <string>
 #include "Pelicula.h"
 #include "Nodo.h"
 using std::string,std::unordered_map,std::vector,std::istringstream;
@@ -107,11 +108,77 @@ public:
     }
 
     // Método general de búsqueda que combina todos los criterios
-    vector<Pelicula> busquedaGeneral(const string& consulta, int limite = 5) {
+    vector<Pelicula> busquedaGeneral( string& consulta, int limite = 5) {
         vector<Pelicula> resultado;
         unordered_set<string> idsEncontrados;
 
+        auto agregarResultadosUnicos = [&](const vector<Pelicula>& nuevosResultados) {
+            for (const auto& pelicula : nuevosResultados) {
+                if (idsEncontrados.insert(pelicula.getId()).second) {
+                    resultado.push_back(pelicula);
+                    if (resultado.size() == limite) return true;
+                }
+            }
+            return false;
+        };
+        bool esTag = false;
+        bool esTituloExacto = false;
+        bool esPalabraSinopsis = false;
+
+        if (!consulta.empty()) {
+            if (consulta.front() == '#') {
+                esTag = true;
+                consulta.erase(0, 1);  // Eliminar el '#'
+            } else if (consulta.front() == '"' && consulta.back() == '"') {
+                esTituloExacto = true;
+                consulta = consulta.substr(1, consulta.length() - 2);  // Eliminar las comillas
+            } else if (consulta.front() == '*') {
+                esPalabraSinopsis = true;
+                consulta.erase(0, 1);  // Eliminar el '*'
+            }
+        }
         // Buscar por tag
+        if (esTag) {
+            // Búsqueda por tag (eliminar el '#' inicial)
+            auto porTag = busquedaPorTag(consulta, limite);
+            for (const auto& pelicula : porTag) {
+                if (idsEncontrados.insert(pelicula.getId()).second) {
+                    resultado.push_back(pelicula);
+                    if (resultado.size() == limite) return resultado;
+                }
+            }
+            if (agregarResultadosUnicos(busquedaPorTag(consulta.substr(1), limite))) return resultado;
+        } else if (esTituloExacto) {
+            // Búsqueda por título exacto (eliminar las comillas)
+            auto porTitulo = busquedaPorTitulo(consulta, limite);
+            for (const auto& pelicula : porTitulo) {
+                if (idsEncontrados.insert(pelicula.getId()).second) {
+                    resultado.push_back(pelicula);
+                    if (resultado.size() == limite) return resultado;
+                }
+            }
+            if (agregarResultadosUnicos(busquedaPorTitulo(consulta.substr(1, consulta.length() - 2), limite))) return resultado;
+        } else if (esPalabraSinopsis) {
+            // Búsqueda por palabra en sinopsis (eliminar el '*' inicial)
+            auto porCaracteres = busquedaPorCaracteres(consulta, limite);
+            for (const auto& pelicula : porCaracteres) {
+                if (idsEncontrados.insert(pelicula.getId()).second) {
+                    resultado.push_back(pelicula);
+                    if (resultado.size() == limite) return resultado;
+                }
+            }
+            if (agregarResultadosUnicos(busquedaPorPalabraEnSinopsis(consulta.substr(1), limite))) return resultado;
+        } else {
+            // Búsqueda general (primero por caracteres en el título, luego por otros criterios)
+            auto porPalabraEnSinopsis = busquedaPorPalabraEnSinopsis(consulta, limite);
+            for (const auto& pelicula : porPalabraEnSinopsis) {
+                if (idsEncontrados.insert(pelicula.getId()).second) {
+                    resultado.push_back(pelicula);
+                    if (resultado.size() == limite) return resultado;
+                }
+            }
+            if (agregarResultadosUnicos(busquedaPorCaracteres(consulta, limite))) return resultado;
+        }
         auto porTag = busquedaPorTag(consulta, limite);
         for (const auto& pelicula : porTag) {
             if (idsEncontrados.insert(pelicula.getId()).second) {
@@ -119,33 +186,9 @@ public:
                 if (resultado.size() == limite) return resultado;
             }
         }
-
-        // Buscar por título
-        auto porTitulo = busquedaPorTitulo(consulta, limite);
-        for (const auto& pelicula : porTitulo) {
-            if (idsEncontrados.insert(pelicula.getId()).second) {
-                resultado.push_back(pelicula);
-                if (resultado.size() == limite) return resultado;
-            }
-        }
-
-        // Buscar por caracteres en el título
-        auto porCaracteres = busquedaPorCaracteres(consulta, limite);
-        for (const auto& pelicula : porCaracteres) {
-            if (idsEncontrados.insert(pelicula.getId()).second) {
-                resultado.push_back(pelicula);
-                if (resultado.size() == limite) return resultado;
-            }
-        }
-
-        // Buscar por palabra en la sinopsis
-        auto porPalabraEnSinopsis = busquedaPorPalabraEnSinopsis(consulta, limite);
-        for (const auto& pelicula : porPalabraEnSinopsis) {
-            if (idsEncontrados.insert(pelicula.getId()).second) {
-                resultado.push_back(pelicula);
-                if (resultado.size() == limite) return resultado;
-            }
-        }
+        if (!esTag && agregarResultadosUnicos(busquedaPorTag(consulta, limite))) return resultado;
+        if (!esTituloExacto && agregarResultadosUnicos(busquedaPorTitulo(consulta, limite))) return resultado;
+        if (!esPalabraSinopsis && agregarResultadosUnicos(busquedaPorPalabraEnSinopsis(consulta, limite))) return resultado;
 
         return resultado;
     }
