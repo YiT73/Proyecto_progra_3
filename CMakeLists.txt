@@ -12,5 +12,6 @@ add_executable(projecto_progra_3 main.cpp
         PeliculaBuilder.h
         Nodo.h
         GrafoPeliculas.h
+        Usuario.h
 
 )
