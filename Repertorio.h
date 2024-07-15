@@ -1,24 +1,34 @@
-//
-// Created by yitzh on 11/07/2024.
-//
-
 #ifndef PROJECTO_PROGRA_3_REPERTORIO_H
 #define PROJECTO_PROGRA_3_REPERTORIO_H
+
 #include <iostream>
 #include <unordered_set>
 #include <unordered_map>
 #include "Pelicula.h"
+#include <vector>
 #include <fstream>
 #include <sstream>
-#include <vector>
-using std::unordered_map,std::unordered_set,std::ifstream,std::getline,std::vector,std::istringstream;
+
+using std::unordered_map, std::unordered_set, std::ifstream, std::getline, std::vector, std::istringstream, std::string;
+
 class Repertorio {
 private:
     unordered_map<string, Pelicula> peliculas;
 
+    // Constructor privado para el patrón Singleton
     Repertorio() = default;
 
+    // Instancia estática de la clase
+    static Repertorio* instancia;
+
 public:
+    static Repertorio* getInstancia() {
+        if (instancia == nullptr) {
+            instancia = new Repertorio();
+        }
+        return instancia;
+    }
+
     unordered_set<string> dividirConComillas(const string& str) {
         unordered_set<string> tokens;
         istringstream tokenStream(str);
@@ -51,14 +61,13 @@ public:
         return tokens;
     }
 
-    unordered_map<string, Pelicula> leerCSV(const string& nombreArchivo) {
-        unordered_map<string, Pelicula> peliculas;
+    void leerCSV(const string& nombreArchivo) {
         ifstream archivo(nombreArchivo);
         string linea;
 
         if (!archivo.is_open()) {
             std::cerr << "No se pudo abrir el archivo: " << nombreArchivo << std::endl;
-            return peliculas;
+            return;
         }
 
         // Leer la cabecera del archivo
@@ -111,8 +120,14 @@ public:
         }
 
         archivo.close();
+    }
+
+    const unordered_map<string, Pelicula>& getPeliculas() const {
         return peliculas;
     }
 };
+
+// Inicializar la instancia estática a nullptr
+Repertorio* Repertorio::instancia = nullptr;
 
 #endif //PROJECTO_PROGRA_3_REPERTORIO_H

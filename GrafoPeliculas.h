@@ -31,6 +31,7 @@ public:
         }
     }
 
+
     void conectarPeliculas(const string& id1, const string& id2) {
         if (nodos.find(id1) != nodos.end() && nodos.find(id2) != nodos.end()) {
             nodos[id1]->agregarConexion(nodos[id2]);
@@ -58,7 +59,7 @@ public:
             }
         }
     }
-    vector<Pelicula> busquedaPorTag(const string& tag, int limite = 5) {
+    vector<Pelicula> busquedaPorTag(const string& tag, int limite = 20) {
         vector<Pelicula> resultado;
         for (const auto& [id, nodo] : nodos) {
             if (nodo->pelicula.getTags().find(tag) != nodo->pelicula.getTags().end()) {
@@ -69,7 +70,7 @@ public:
         return resultado;
     }
 
-    vector<Pelicula> busquedaPorTitulo(const string& titulo, int limite = 5) {
+    vector<Pelicula> busquedaPorTitulo(const string& titulo, int limite = 10) {
         vector<Pelicula> resultado;
         for (const auto& [id, nodo] : nodos) {
             if (comparaIgnorandoCase(nodo->pelicula.getTitulo(), titulo)) {
@@ -91,7 +92,7 @@ public:
         return resultado;
     }
 
-    vector<Pelicula> busquedaPorPalabraEnSinopsis(const string& palabra, int limite = 5) {
+    vector<Pelicula> busquedaPorPalabraEnSinopsis(const string& palabra, int limite = 10) {
         vector<Pelicula> resultado;
         for (const auto& [id, nodo] : nodos) {
             istringstream iss(nodo->pelicula.getSinopsis());
@@ -107,8 +108,7 @@ public:
         return resultado;
     }
 
-    // Método general de búsqueda que combina todos los criterios
-    vector<Pelicula> busquedaGeneral( string& consulta, int limite = 5) {
+    vector<Pelicula> busquedaGeneral( string& consulta, int limite = 10) {
         vector<Pelicula> resultado;
         unordered_set<string> idsEncontrados;
 

@@ -1,13 +1,10 @@
-//
-// Created by yitzh on 11/07/2024.
-//
-
 #ifndef PROJECTO_PROGRA_3_PELICULA_H
 #define PROJECTO_PROGRA_3_PELICULA_H
+
 #include <iostream>
 #include <unordered_set>
 
-using std::string,std::unordered_set;
+using std::string, std::unordered_set;
 
 class Pelicula {
 private:
@@ -16,8 +13,9 @@ private:
     string sinopsis;
     unordered_set<string> tags;
 public:
-    Pelicula()=default;
-    Pelicula(string i, string t, string s, unordered_set<string> ta): id(i), titulo(t), sinopsis(s), tags(ta) {}
+    Pelicula() = default;
+    Pelicula(string i, string t, string s, unordered_set<string> ta)
+            : id(std::move(i)), titulo(std::move(t)), sinopsis(std::move(s)), tags(std::move(ta)) {}
 
     const string& getId() const {
         return id;
@@ -35,6 +33,5 @@ public:
         return tags;
     }
 };
-
 
 #endif //PROJECTO_PROGRA_3_PELICULA_H
