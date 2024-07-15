@@ -2,3 +2,4 @@
 ## Integrantes 
 * Yitzhak Abraham Namihas Millan
 * Carla Viviana Molina Alvares
+* Adrian Alonso Deza Luna Victoria
