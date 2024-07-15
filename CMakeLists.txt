@@ -7,5 +7,11 @@ add_executable(projecto_progra_3 main.cpp
         main.cpp
         Usuario.h
         ControlEdad.h
+        Repertorio.h
+        Nodo.h
+        ControlEdad.h
+        Pelicula.h
+        GrafoPeliculas.h
+        PeliculaBuilder.h
 
 )

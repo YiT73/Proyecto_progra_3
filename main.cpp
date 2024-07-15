@@ -6,12 +6,8 @@
 #include "ControlEdad.h"
 using std::cout;
 int main(){
-    Usuario* u1= Usuario::get();
-    cout<<"---------------------------------------------------"<<endl;
-    u1->iniciar_sesion();
-    u1->view();
     Repertorio repertorio;
-    auto peliculas = repertorio.leerCSV("peliculas.csv");
+    auto peliculas = repertorio.leerCSV("data_corrected.csv");
 
     GrafoPeliculas grafo;
 
@@ -22,6 +18,11 @@ int main(){
 
     // Crear conexiones basadas en tags compartidos
     grafo.crearConexionesPorTags();
+    Usuario* u1= Usuario::get();
+    cout<<"---------------------------------------------------"<<endl;
+    u1->iniciar_sesion();
+    u1->view();
+
     cout<<"---------------------------------------------------"<<endl;
     cout<<"Que esta buscando?";
     cout<<"Si decea hacer una busqueda espefica ponga lo siguiente al inicio de lo que va a escribir\n"
