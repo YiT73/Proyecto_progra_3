@@ -39,26 +39,7 @@ public:
         }
     }
 
-    // Método para crear conexiones basadas en tags compartidos
-    void crearConexionesPorTags() {
-        for (const auto& [id1, nodo1] : nodos) {
-            for (const auto& [id2, nodo2] : nodos) {
-                if (id1 != id2) {
-                    // Compara los tags de las dos películas
-                    const auto& tags1 = nodo1->pelicula.getTags();
-                    const auto& tags2 = nodo2->pelicula.getTags();
 
-                    // Si tienen al menos un tag en común, crea una conexión
-                    for (const auto& tag : tags1) {
-                        if (tags2.find(tag) != tags2.end()) {
-                            conectarPeliculas(id1, id2);
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-    }
     vector<Pelicula> busquedaPorTag(const string& tag, int limite = 20) {
         vector<Pelicula> resultado;
         for (const auto& [id, nodo] : nodos) {
