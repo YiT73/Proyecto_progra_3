@@ -66,7 +66,7 @@ void mostrarDetallesPelicula(Pelicula pelicula) {
 
     cout << "Opciones:\n";
     cout << "1. Dar like\n";
-    cout << "2. Ver más tarde\n";
+    cout << "2. Ver mas tarde\n";
     cout << "3. Volver a los resultados\n";
     cout << "Seleccione una opcion: ";
     int opcion;
@@ -135,45 +135,48 @@ void realizarBusqueda(GrafoPeliculas& grafo) {
             mostrarPeliculasSimilares(grafo);
             continue;
         }
-
-        cout << "Ingrese la palabra de busqueda: ";
-        string palabraBusqueda;
-        cin.ignore();  // Limpiar el buffer
-        getline(cin, palabraBusqueda);
-
-        vector<Pelicula> resultados;
-        if (opcion == 1) {
-            resultados = grafo.busquedaPorTitulo(palabraBusqueda);
-            cout << "Resultados de la busqueda por titulo '" << palabraBusqueda << "':" << endl;
-        } else if (opcion == 2) {
-            resultados = grafo.busquedaPorPalabraEnSinopsis(palabraBusqueda);
-            cout << "Resultados de la busqueda por palabra en sinopsis '" << palabraBusqueda << "':" << endl;
-        } else if (opcion == 3) {
-            resultados = grafo.busquedaGeneral(palabraBusqueda);
-            cout << "Resultados de la busqueda general '" << palabraBusqueda << "':" << endl;
-        } else if (opcion == 4) {
-            resultados = grafo.busquedaPorTag(palabraBusqueda);
-            cout << "Resultados de la busqueda por tag '" << palabraBusqueda << "':" << endl;
-        } else {
-            cout << "Opcion no válida. Intentelo de nuevo.\n";
-            continue;
-        }
-
-        int indice = 0;
-        mostrarResultados(resultados, indice);
-
-        while (true) {
-            cout << "Seleccione el numero de la pelicula para ver más detalles (0 para volver): ";
-            int seleccion;
-            cin >> seleccion;
-            if (seleccion == 0) {
-                break;
-            } else if (seleccion > 0 && seleccion <= resultados.size()) {
-                mostrarDetallesPelicula(resultados[seleccion - 1]);
+        if (opcion!=6){
+            cout << "Ingrese la palabra de busqueda: ";
+            string palabraBusqueda;
+            cin.ignore();  // Limpiar el buffer
+            getline(cin, palabraBusqueda);
+            vector<Pelicula> resultados;
+            if (opcion == 1) {
+                resultados = grafo.busquedaPorTitulo(palabraBusqueda);
+                cout << "Resultados de la busqueda por titulo '" << palabraBusqueda << "':" << endl;
+            } else if (opcion == 2) {
+                resultados = grafo.busquedaPorPalabraEnSinopsis(palabraBusqueda);
+                cout << "Resultados de la busqueda por palabra en sinopsis '" << palabraBusqueda << "':" << endl;
+            } else if (opcion == 3) {
+                resultados = grafo.busquedaGeneral(palabraBusqueda);
+                cout << "Resultados de la busqueda general '" << palabraBusqueda << "':" << endl;
+            } else if (opcion == 4) {
+                resultados = grafo.busquedaPorTag(palabraBusqueda);
+                cout << "Resultados de la busqueda por tag '" << palabraBusqueda << "':" << endl;
             } else {
-                cout << "Selección no válida. Intentelo de nuevo.\n";
+                cout << "Opcion no válida. Intentelo de nuevo.\n";
+                continue;
+            }
+
+            int indice = 0;
+            mostrarResultados(resultados, indice);
+
+            while (true) {
+                cout << "Seleccione el numero de la pelicula para ver mas detalles (0 para volver): ";
+                int seleccion;
+                cin >> seleccion;
+                if (seleccion == 0) {
+                    break;
+                } else if (seleccion > 0 && seleccion <= resultados.size()) {
+                    mostrarDetallesPelicula(resultados[seleccion - 1]);
+                } else {
+                    cout << "Selección no válida. Intentelo de nuevo.\n";
+                }
             }
         }
+
+
+
     }
 }
 

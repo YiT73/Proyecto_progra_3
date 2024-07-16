@@ -32,14 +32,6 @@ public:
     }
 
 
-    void conectarPeliculas(const string& id1, const string& id2) {
-        if (nodos.find(id1) != nodos.end() && nodos.find(id2) != nodos.end()) {
-            nodos[id1]->agregarConexion(nodos[id2]);
-            nodos[id2]->agregarConexion(nodos[id1]);
-        }
-    }
-
-
     vector<Pelicula> busquedaPorTag(const string& tag, int limite = 20) {
         vector<Pelicula> resultado;
         for (const auto& [id, nodo] : nodos) {
