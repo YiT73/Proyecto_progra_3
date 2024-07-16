@@ -37,8 +37,8 @@ public:
     }
 
     PeliculaBuilder& conSinopsis(std::string s) {
-        if (s.length() > 500) {
-            throw std::invalid_argument("La sinopsis no puede exceder los 500 caracteres");
+        if (s.length() > 1000000000) {
+            throw std::invalid_argument("La sinopsis no puede exceder los 1000000000 caracteres");
         }
         this->sinopsis = std::move(s);
         return *this;

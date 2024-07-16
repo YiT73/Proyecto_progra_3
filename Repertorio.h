@@ -5,6 +5,7 @@
 #include <unordered_set>
 #include <unordered_map>
 #include "Pelicula.h"
+#include "PeliculaBuilder.h"
 #include <vector>
 #include <fstream>
 #include <sstream>
@@ -113,10 +114,13 @@ public:
 
             // Procesar los tags
             std::unordered_set<string> tags = dividirConComillas(tagsStr);
-
+            PeliculaBuilder nueva_pelicula;
+            nueva_pelicula.conTags(tags);
+            nueva_pelicula.conId(imdb_id);
+            nueva_pelicula.conTitulo(title);
+            nueva_pelicula.conSinopsis(plot_synopsis);
             // Crear la película y añadirla al mapa
-            Pelicula pelicula(imdb_id, title, plot_synopsis, tags);
-            peliculas[imdb_id] = std::move(pelicula);
+            peliculas[imdb_id] = std::move(nueva_pelicula.construir());
         }
 
         archivo.close();
