@@ -110,7 +110,8 @@ void mostrarPeliculasSimilares(GrafoPeliculas& grafo) {
 void realizarBusqueda(GrafoPeliculas& grafo) {
     Usuario* usuario = Usuario::get();
     while (true) {
-
+        usuario->mostrarVerMasTarde();
+        usuario->mostrarlike();
         cout << "\nSeleccione el tipo de busqueda:\n";
         cout << "1. Busqueda por Titulo\n";
         cout << "2. Busqueda por Palabra en Sinopsis\n";
@@ -125,10 +126,6 @@ void realizarBusqueda(GrafoPeliculas& grafo) {
 
         if (opcion == 7) {
             break;
-        }
-
-        if (opcion == 6){
-            usuario->mostrarVerMasTarde();
         }
 
         if (opcion == 5) {

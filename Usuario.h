@@ -98,6 +98,15 @@ public:
     void darLike(const Pelicula& pelicula) {
         peliculasLiked.push_back(pelicula);
     }
+    void mostrarlike() {
+        cout << "Peliculas 'que diste like':" << endl;
+        for (const auto& pelicula : peliculasLiked) {
+            cout << "- " << pelicula.getTitulo() << endl;
+        }
+        if (peliculasLiked.empty()) {
+            cout << "No tienes peliculas en 'lista de me gusta'." << endl;
+        }
+    }
 
     // Método para obtener las películas a las que el usuario ha dado like
     const vector<Pelicula>& getPeliculasLiked() const {
